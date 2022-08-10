@@ -4,16 +4,17 @@ const p=path.join(path.dirname(require.main.filename),
 'data',
 'products.json');
 
-// my function getProducts() uses the fs.readFile() method to read the products.json file and return the data in the callback function.
-const getProductsFromFile = cb => {
-    fs.readFile(p, (err, fileContent) => {
-      if (err) {
-        cb([]);
-      } else {
-        cb(JSON.parse(fileContent));
-      }
+function getProductsPromise() {
+    return new Promise((resolve, reject) => {
+        fs.readFile(p, (err, fileContent) => {
+            if (err) {
+                reject([]);
+            } else {
+                resolve(JSON.parse(fileContent));
+            }
+        });
     });
-  };
+}
 
 module.exports= class Product {
     constructor(title, imageUrl, description, price) {
@@ -24,15 +25,17 @@ module.exports= class Product {
         this.price = price;
     }
     // je créé une méthode pour ajouter un produit
-    save() {
+    async save() {
         // I retrieve the promise from the getProductsFromFile() method and store the result in a variable called products.It is an array.
-        getProductsFromFile(products => {
-            products.push(this);
-            fs.writeFile(p, JSON.stringify(products), err => {
-                console.log(err);
-            });
-        });
+        const products = await getProductsPromise();
+        // I push the new product in the products array.
+        products.push(this);
+        // I write the products array in the products.json file.
+        fs.writeFile(p, JSON.stringify(products), err => {
+            console.log(err);
+        } );
     }
+
 
         // I create the path to the file
         // i need to read the file and parse it to an object
@@ -50,8 +53,8 @@ module.exports= class Product {
     // });
     
     // je créé une méthode pour récupérer tous les produits avec static pour pouvoir l'utiliser sans instancier la classe
-    static fetchAll(cb) {
-        getProductsFromFile(cb);
+    static async fetchAll() {
+        return await getProductsPromise();
         //     // my static method execute this line 
         // const p=path.join(
         //     path.dirname(require.main.filename),
