@@ -5,22 +5,23 @@ const p=path.join(path.dirname(require.main.filename),
 'products.json');
 
 // my function getProducts() uses the fs.readFile() method to read the products.json file and return the data in the callback function.
-const getProductsFromFile=cb=>{
-
-    fs.readFile(p,(err,fileContent)=>{
-        if(err){
-         cb([]);
-        } else {
-
+const getProductsFromFile = cb => {
+    fs.readFile(p, (err, fileContent) => {
+      if (err) {
+        cb([]);
+      } else {
         cb(JSON.parse(fileContent));
-        }
+      }
     });
-}
+  };
 
 module.exports= class Product {
-    constructor(t) {
+    constructor(title, imageUrl, description, price) {
         // je créé un objet avec les propriétés title
-        this.title = t;
+        this.title = title;
+        this.imageUrl = imageUrl;
+        this.description = description;
+        this.price = price;
     }
     // je créé une méthode pour ajouter un produit
     save() {
