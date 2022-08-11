@@ -3,6 +3,7 @@ const path=require('path');
 const p=path.join(path.dirname(require.main.filename),
 'data',
 'products.json');
+const Cart=require('./cart');
 
 // my function getProducts() uses the fs.readFile() method to read the products.json file and return the data in the callback function.
 const getProductsFromFile = cb => {
@@ -90,5 +91,18 @@ module.exports= class Product {
           cb(product);
         });
       }
+
+      static deleteById(id) {
+          getProductsFromFile(products => {
+            const product = products.find(prod => prod.id === id);
+            const updatedProducts = products.filter(prod => prod.id !== id);
+            fs.writeFile(p, JSON.stringify(updatedProducts), err => {
+              if (!err) {
+                Cart.deleteProduct(id, product.price);
+              }
+            });
+          });
+        }
     };
+
     
