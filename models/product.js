@@ -16,8 +16,9 @@ const getProductsFromFile = cb => {
   };
 
 module.exports= class Product {
-    constructor(title, imageUrl, description, price) {
+    constructor(id, title, imageUrl, description, price) {
         // je créé un objet avec les propriétés title
+        this.id=id;
         this.title = title;
         this.imageUrl = imageUrl;
         this.description = description;
@@ -25,14 +26,27 @@ module.exports= class Product {
     }
     // je créé une méthode pour ajouter un produit
     save() {
-        console.log('Ter');
-        this.id=Math.random().toString();
+
         // I retrieve the promise from the getProductsFromFile() method and store the result in a variable called products.It is an array.
         getProductsFromFile(products => {
+          if (this.id) {
+            // je retrouve l'index du produit dans le tableau products
+            const existingProductIndex = products.findIndex(prod => prod.id === this.id);
+            // je modifie le produit dans le tableau products
+            const updatedProducts = [...products];
+            // je remplace le produit dans le tableau products par le nouveau produit
+            updatedProducts[existingProductIndex] = this;
+            fs.writeFile(p, JSON.stringify(updatedProducts), err => {
+              console.log(err);
+            });
+          }else {
+            this.id=Math.random().toString();
+
             products.push(this);
             fs.writeFile(p, JSON.stringify(products), err => {
-                console.log(err);
+              console.log(err);
             });
+          }
         });
     }
 
