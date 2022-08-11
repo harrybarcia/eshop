@@ -25,6 +25,8 @@ module.exports= class Product {
     }
     // je créé une méthode pour ajouter un produit
     save() {
+        console.log('Ter');
+        this.id=Math.random().toString();
         // I retrieve the promise from the getProductsFromFile() method and store the result in a variable called products.It is an array.
         getProductsFromFile(products => {
             products.push(this);
@@ -68,5 +70,11 @@ module.exports= class Product {
         //     cb(JSON.parse(fileContent));
         // });
     }
-
-}
+    static findById(id, cb) {
+        getProductsFromFile(products => {
+          const product = products.find(p => p.id === id);
+          cb(product);
+        });
+      }
+    };
+    
