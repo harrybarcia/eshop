@@ -1,5 +1,4 @@
 const Product = require('../models/product');
-const Cart = require('../models/cart');
 
 exports.getProducts = (req, res, next) => {
   Product.fetchAll()
@@ -44,33 +43,36 @@ exports.getIndex = (req, res, next) => {
 }
 
 exports.getCart = (req, res, next) => {
-  Cart.getCart(cart => {
-    Product.fetchAll(products => {
-      const cartProducts = [];
-      for (product of products) {
-        const cartProductData = cart.products.find(
-          prod => prod.id === product.id
-        );
-        if (cartProductData) {
-          cartProducts.push({ productData: product, qty: cartProductData.qty });
-        }
-      }
-      res.render('shop/cart', {
-        path: '/cart',
-        pageTitle: 'Your Cart',
-        products: cartProducts
-      });
+  req.user.getCart()
+.then(products => {
+    res.render('shop/cart', {
+      path: '/cart',
+      pageTitle: 'Your Cart',
+      products: products
     });
-  });
+    console.log('here');
+    console.log(products);
+  }).catch(err => {
+    console.log(err);
+  }
+  );
 };
 // I retrieve the request body from the form sent by the user
 exports.postCart = (req, res, next) => {
   const prodId = req.body.productId;
-  // I use the methods from the cart model to add the product to the cart
-  Product.findById(prodId, product => {
-    Cart.addProduct(prodId, product.price);
+
+  Product.findById(prodId)
+  .then(product => {
+    return req.user.addToCart(product);
   })
-  res.redirect('/cart');
+  .then(result=>{
+      console.log(result);
+      res.redirect('/cart');
+  })
+  .catch(err=>{
+    console.log(err);
+  }
+  );
 }
 
 exports.postCartDeleteProduct = (req, res, next) => {
