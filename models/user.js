@@ -90,16 +90,17 @@ class User {
   }
 
 
-// getOrders() {
-//     const db = getDb();
-//     return db
-//         .collection('orders')
-//         .find({ 'user.userId': this._id })
-//         .toArray()
-//         .then(orders => {
-//             return orders;
-//         })
-// }
+
+getOrders() {
+    const db = getDb();
+    return db
+        .collection('orders')
+        .find({ 'user.userId': this._id })
+        .toArray()
+        .then(orders => {
+            return orders;
+        })
+}
 
 
 
