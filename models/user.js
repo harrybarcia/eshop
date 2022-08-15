@@ -91,16 +91,14 @@ class User {
 
 
 
-getOrders() {
+  getOrders() {
     const db = getDb();
     return db
-        .collection('orders')
-        .find({ 'user.userId': this._id })
-        .toArray()
-        .then(orders => {
-            return orders;
-        })
-}
+      .collection('orders')
+      .find({ 'user._id': new ObjectId(this._id) })
+      .toArray();
+  }
+
 
 
 

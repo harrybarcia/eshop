@@ -22,6 +22,9 @@ class Product{
         }
         console.log('this');
         console.log(this);
+        console.log('dbOp');
+        console.log(dbOp);
+
         return dbOp
         .then(result=>{
             console.log(result);

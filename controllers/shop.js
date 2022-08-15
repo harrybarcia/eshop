@@ -50,8 +50,7 @@ exports.getCart = (req, res, next) => {
       pageTitle: 'Your Cart',
       products: products
     });
-    console.log('here');
-    console.log(products);
+    
   }).catch(err => {
     console.log(err);
   }
@@ -98,15 +97,24 @@ exports.postOrder = (req, res, next) => {
 
 
 exports.getOrders = (req, res, next) => {
-  res.render('shop/orders', {
-    path: '/orders',
-    pageTitle: 'Your Orders'
-  });
+  req.user
+    .getOrders()
+    .then(orders => {
+      res.render('shop/orders', {
+        path: '/orders',
+        pageTitle: 'Your Orders',
+        orders: orders
+      });
+      console.log('here');
+      console.log(orders.length);
+    })
+    .catch(err => console.log(err));
 };
 
 exports.getCheckout = (req, res, next) => {
   res.render('shop/checkout', {
     path: '/checkout',
-    pageTitle: 'Checkout'
+    pageTitle: 'Checkout',
+    
   });
 };
