@@ -1,7 +1,8 @@
 const Product = require('../models/product');
 
 exports.getProducts = (req, res, next) => {
-  Product.fetchAll()
+  // i use find instead of fetchAll 
+  Product.find()
     .then(products => {
       res.render('shop/product-list', {
         prods: products,
@@ -17,6 +18,7 @@ exports.getProducts = (req, res, next) => {
 
 exports.getProduct = (req, res, next) => {
   const prodId = req.params.productId;
+  //findbyid is a mongoose method 
   Product.findById(prodId)
     .then(product => {
     res.render('shop/product-detail', {
