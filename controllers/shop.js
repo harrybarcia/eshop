@@ -115,25 +115,23 @@ exports.postOrder = (req, res, next) => {
 }).then(result=>{
       res.redirect('/orders');
     })
-    
+
     .catch(err => console.log(err));
 };
 
 
 exports.getOrders = (req, res, next) => {
-  req.user
-    .getOrders()
-    .then(orders => {
-      res.render('shop/orders', {
-        path: '/orders',
-        pageTitle: 'Your Orders',
-        orders: orders
-      });
-      console.log('here');
-      console.log(orders.length);
-    })
-    .catch(err => console.log(err));
-};
+  Order.find({'user.userId': req.user._id})
+  .then(orders => {
+    res.render('shop/orders', {
+      path: '/orders',
+      pageTitle: 'Your Orders',
+      orders: orders
+    });
+  }).catch(err => {
+    console.log(err);
+  });
+} 
 
 exports.getCheckout = (req, res, next) => {
   res.render('shop/checkout', {
