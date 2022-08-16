@@ -16,8 +16,9 @@ exports.postAddProduct = (req, res, next) => {
   const imageUrl = req.body.imageUrl;
   const price = req.body.price;
   const description = req.body.description;
+
   // the left side is the key and the right side is the value
-  const product = new Product({ title: title, price: price, description: description, imageUrl: imageUrl });
+  const product = new Product({ title: title, price: price, description: description, imageUrl: imageUrl, userId: req.user});
   product
   // save method comes from the mongoose model
   .save()
@@ -88,7 +89,11 @@ exports.postDeleteProduct= (req, res, next) => {
 
 exports.getProducts = (req, res, next) => {
   Product.find()
+// allow to have the all object and not write queries one by one
+// .select('title price -_id')
+//   .populate('userId', 'name')
   .then(products => {
+
     res.render('admin/products', {
       prods: products,
       pageTitle: 'Admin Products',
