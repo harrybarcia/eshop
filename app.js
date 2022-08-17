@@ -36,6 +36,19 @@ app.use(
   })
 );
 
+
+app.use((req, res, next) => {
+    if (!req.session.user) {
+      return next();
+    }
+    User.findById(req.session.user._id)
+    .then(user => {
+        // it is fueled by the session
+        req.user = user;
+        next();
+    }).catch(err => console.log(err));
+}
+);
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
 app.use(authRoutes);
