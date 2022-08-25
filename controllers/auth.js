@@ -2,6 +2,8 @@ const bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
 // to secure random values
 const crypto = require('crypto');
+const {validationResult} = require('express-validator');
+
 var transport = nodemailer.createTransport({
   host: "smtp.mailtrap.io",
   port: 2525,
@@ -63,6 +65,10 @@ exports.postSignup = (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
   const confirmPassword = req.body.confirmPassword;
+  
+  
+      
+
   User.findOne({ email: email })
     .then(userDoc => {
       if (userDoc) {
