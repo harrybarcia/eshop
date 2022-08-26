@@ -167,6 +167,7 @@ exports.deleteProduct = (req, res, next) => {
     })
     .then(() => {
       console.log('DESTROYED PRODUCT');
+      // I return a response data that is gonna be managed by the frontend
       res.status(200).json({ message: 'Success!' });
     })
     .catch(err => {
