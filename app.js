@@ -20,6 +20,13 @@ const store = new MongoDBStore({
   uri: MONGODB_URI,
   collection: 'sessions'
 });
+
+app.all('*', function(req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'X-Requested-With');
+  res.header('Access-Control-Allow-Headers', 'Content-Type');
+  next();
+});
 const csrfProtection = csrf();
 
 const fileStorage = multer.diskStorage({
@@ -112,7 +119,7 @@ app.use((error, req, res, next) => {
 mongoose
   .connect(MONGODB_URI)
   .then(result => {
-    app.listen(3000);
+    app.listen(3001);
   })
   .catch(err => {
     console.log(err);
