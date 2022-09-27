@@ -34,7 +34,7 @@ exports.getProduct = (req, res, next) => {
       return next(error);
     });
 };
-
+// Je récupère les produits de la base de données
 exports.getIndex = (req, res, next) => {
   Product.find()
     .then(products => {
@@ -52,13 +52,13 @@ exports.getIndex = (req, res, next) => {
 };
 
 exports.getCart = (req, res, next) => {
-console.log("req.user", req.user);
-console.log("req.user", req.user.cart.items);
+
   req.user
+  // populate permet de récupérer les données de la table product par association avec la table user
+  // dans mon modèle, j'ai défini un schéma de type ObjectId qui fait référence à la table product
     .populate('cart.items.productId')
     .then(user => {
       const products = user.cart.items;
-      console.log(products);
       res.render('shop/cart', {
         path: '/cart',
         pageTitle: 'Your Cart',

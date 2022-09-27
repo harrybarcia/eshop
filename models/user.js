@@ -29,13 +29,21 @@ const usersSchema = new Schema({
 });                             
 
 usersSchema.methods.addToCart = function(product){
-    const cartProductIndex = this.cart.items.findIndex(cp => {
+  // je recherche l'index du produit dans le panier de l'utilisateur, un utilisateur peut avoir plusieurs produits dans son panier
+      // findIndex retourne l'index du premier produit qui remplit une condition dans le panier de l'utilisateur
+      const cartProductIndex = this.cart.items.findIndex(cp => {
+        // cp est un objet qui représente un produit dans le panier de l'utilisateur
+        // si l'id du produit dans le panier est égal à l'id du produit passé en paramètre de la fonction addToCart alors on retourne true
       return cp.productId.toString() === product._id.toString();
     });
     let newQuantity = 1;
+    // on crée une copie du tableau des produits dans le panier de l'utilisateur
     const updatedCartItems = [...this.cart.items];
 
     if (cartProductIndex >= 0) {
+      console.log('cartProductIndex', cartProductIndex);
+      // si le produit est déjà dans le panier de l'utilisateur
+      // on incrémente la quantité du produit dans le panier de l'utilisateur
       newQuantity = this.cart.items[cartProductIndex].quantity + 1;
       updatedCartItems[cartProductIndex].quantity = newQuantity;
     } else {
